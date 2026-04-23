@@ -1,5 +1,34 @@
-backend/**/__pycache__/
-backend/soukai.db
-backend/_upload_*
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+venv/
+.venv/
+*.pyo
+
+# Environment
+.env
+.env.local
+
+# Node
 node_modules/
 frontend/dist/
+
+# Database
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+
+# Docker
+.dockerignore
+
+# Backend specific
+backend/_upload_*
+
+# Data: sample CSVs are committed intentionally
+# data/*.csv  <-- do NOT ignore
+
