@@ -5,10 +5,10 @@ Endpoints for single-comment intent analysis and CSV bulk upload.
 
 from __future__ import annotations
 
-import io
 import logging
-import tempfile
 import os
+import re
+import uuid
 
 import aiofiles
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
@@ -97,8 +97,7 @@ async def upload_csv(
 
     # Sanitise filename: strip directory components and unsafe characters,
     # then use a UUID prefix so concurrent uploads never collide.
-    import uuid, re as _re
-    safe_name = _re.sub(r"[^\w\-.]", "_", os.path.basename(file.filename or "upload.csv"))
+    safe_name = re.sub(r"[^\w\-.]", "_", os.path.basename(file.filename or "upload.csv"))
     tmp_path = f"_upload_{uuid.uuid4().hex}_{safe_name}"
     try:
         async with aiofiles.open(tmp_path, "wb") as f_out:
