@@ -95,8 +95,11 @@ async def upload_csv(
     if not contents:
         raise HTTPException(status_code=400, detail="Uploaded file is empty.")
 
-    # Write to a temporary file in the current working directory to avoid /tmp
-    tmp_path = f"_upload_{file.filename}"
+    # Sanitise filename: strip directory components and unsafe characters,
+    # then use a UUID prefix so concurrent uploads never collide.
+    import uuid, re as _re
+    safe_name = _re.sub(r"[^\w\-.]", "_", os.path.basename(file.filename or "upload.csv"))
+    tmp_path = f"_upload_{uuid.uuid4().hex}_{safe_name}"
     try:
         async with aiofiles.open(tmp_path, "wb") as f_out:
             await f_out.write(contents)

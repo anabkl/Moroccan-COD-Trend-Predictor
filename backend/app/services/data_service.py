@@ -303,7 +303,7 @@ SAMPLE_PRODUCTS = [
         "competition_level": 0.20,
         "estimated_profit_margin": 0.70,
         "comments": [
-            "bchhal had semelles? 3afak nCommandi",
+            "bchhal had semelles? 3afak ncommandi",
             "wach katwsl? livraison express?",
             "kifach ncommandi? bghit wahed!",
             "prix? disponible Maroc? wach ghali?",

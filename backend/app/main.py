@@ -5,6 +5,7 @@ SoukAI – FastAPI Application Entry Point
 from __future__ import annotations
 
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,6 +28,27 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
+# Lifespan context manager (replaces deprecated @app.on_event)
+# ---------------------------------------------------------------------------
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application startup and shutdown logic."""
+    logger.info("Starting %s v%s …", settings.PROJECT_NAME, settings.API_VERSION)
+    create_tables()
+
+    db = SessionLocal()
+    try:
+        seed_sample_data(db)
+    finally:
+        db.close()
+
+    logger.info("Startup complete. Docs at /docs")
+    yield
+    logger.info("%s shutting down.", settings.PROJECT_NAME)
+
+
+# ---------------------------------------------------------------------------
 # FastAPI app
 # ---------------------------------------------------------------------------
 
@@ -37,6 +59,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    lifespan=lifespan,
     contact={
         "name": "SoukAI Team",
         "url": "https://github.com/anabkl/Moroccan-COD-Trend-Predictor",
@@ -57,29 +80,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# ---------------------------------------------------------------------------
-# Startup / shutdown lifecycle
-# ---------------------------------------------------------------------------
-
-@app.on_event("startup")
-async def on_startup() -> None:
-    logger.info("Starting %s v%s …", settings.PROJECT_NAME, settings.API_VERSION)
-    create_tables()
-
-    db = SessionLocal()
-    try:
-        seed_sample_data(db)
-    finally:
-        db.close()
-
-    logger.info("Startup complete. Docs at /docs")
-
-
-@app.on_event("shutdown")
-async def on_shutdown() -> None:
-    logger.info("%s shutting down.", settings.PROJECT_NAME)
 
 
 # ---------------------------------------------------------------------------

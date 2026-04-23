@@ -29,21 +29,19 @@ _URL_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# Emojis – Unicode blocks covering most emoji ranges
+# Emojis – separate alternation groups avoid overlapping-range CodeQL warnings
 _EMOJI_PATTERN = re.compile(
-    "["
-    "\U0001F600-\U0001F64F"  # emoticons
-    "\U0001F300-\U0001F5FF"  # symbols & pictographs
-    "\U0001F680-\U0001F6FF"  # transport & map
-    "\U0001F700-\U0001F77F"  # alchemical symbols
-    "\U0001F780-\U0001F7FF"  # geometric shapes extended
-    "\U0001F800-\U0001F8FF"  # supplemental arrows-C
-    "\U0001F900-\U0001F9FF"  # supplemental symbols
-    "\U0001FA00-\U0001FA6F"  # chess symbols
-    "\U0001FA70-\U0001FAFF"  # symbols and pictographs extended-A
-    "\U00002702-\U000027B0"  # dingbats
-    "\U000024C2-\U0001F251"
-    "]+",
+    r"[\U0001F600-\U0001F64F]"   # emoticons
+    r"|[\U0001F300-\U0001F5FF]"  # symbols & pictographs
+    r"|[\U0001F680-\U0001F6FF]"  # transport & map
+    r"|[\U0001F700-\U0001F77F]"  # alchemical symbols
+    r"|[\U0001F780-\U0001F7FF]"  # geometric shapes extended
+    r"|[\U0001F800-\U0001F8FF]"  # supplemental arrows-C
+    r"|[\U0001F900-\U0001F9FF]"  # supplemental symbols
+    r"|[\U0001FA00-\U0001FA6F]"  # chess symbols
+    r"|[\U0001FA70-\U0001FAFF]"  # symbols and pictographs extended-A
+    r"|[\U00002702-\U000027B0]"  # dingbats
+    r"|[\U000024C2-\U00002B55]", # enclosed / misc symbols (non-overlapping)
     flags=re.UNICODE,
 )
 
