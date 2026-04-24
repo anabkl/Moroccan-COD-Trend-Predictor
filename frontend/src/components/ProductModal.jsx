@@ -3,26 +3,32 @@ import { X } from 'lucide-react'
 import TrendScoreBar from './TrendScoreBar'
 import { getProduct } from '../api/client'
 
+// Maximum expected comment volume — used to normalise comment_volume to 0–100%
+const MAX_COMMENT_VOLUME = 20
+
 const METRICS = [
-  { key: 'intent_score',      label: 'Purchase Intent',   max: 10 },
-  { key: 'competition_score', label: 'Low Competition',   max: 10 },
-  { key: 'profit_margin',     label: 'Profit Margin',     max: 100 },
-  { key: 'social_buzz_score', label: 'Social Buzz',       max: 10 },
-  { key: 'delivery_score',    label: 'Delivery Ease',     max: 10 }
+  { key: 'purchase_intent_score', label: 'Purchase Intent' },
+  { key: 'trend_growth',          label: 'Trend Growth' },
+  { key: 'estimated_profit_margin', label: 'Profit Margin' },
+  { key: 'competition_level',     label: 'Competition' },
+  { key: 'comment_volume',        label: 'Comment Volume' },
 ]
 
-function MetricBar({ label, value, max }) {
-  const pct = Math.min(100, ((value || 0) / max) * 100)
+function MetricBar({ label, value, inverted = false, pct }) {
+  const barPct = pct != null ? pct : Math.min(100, (value || 0) * 100)
+  const barColor = inverted
+    ? barPct > 60 ? '#ef4444' : barPct > 30 ? '#f59e0b' : '#22c55e'
+    : barPct >= 60 ? '#22c55e' : barPct >= 30 ? '#f59e0b' : '#3b82f6'
   return (
     <div>
       <div className="flex justify-between text-xs mb-1">
         <span className="text-gray-600 font-medium">{label}</span>
-        <span className="text-gray-800 font-bold">{value ?? 'N/A'}</span>
+        <span className="text-gray-800 font-bold">{pct != null ? `${Math.round(pct)}%` : `${Math.round((value || 0) * 100)}%`}</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2">
         <div
-          className="bg-brand-DEFAULT h-2 rounded-full transition-all duration-700"
-          style={{ width: `${pct}%` }}
+          className="h-2 rounded-full transition-all duration-700"
+          style={{ width: `${barPct}%`, backgroundColor: barColor }}
         />
       </div>
     </div>
@@ -53,8 +59,8 @@ export default function ProductModal({ product, onClose }) {
   if (!product) return null
 
   const p = details || product
-  const comments = p.top_comments || []
-  const explanation = p.ai_explanation || {}
+  const comments = p.comments || []
+  const explanation = p.explanation || {}
 
   return (
     <div
@@ -96,8 +102,14 @@ export default function ProductModal({ product, onClose }) {
             <div>
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Scoring Factors</p>
               <div className="space-y-3">
-                {METRICS.map(({ key, label, max }) => (
-                  <MetricBar key={key} label={label} value={p[key]} max={max} />
+                {METRICS.map(({ key, label }) => (
+                  <MetricBar
+                    key={key}
+                    label={label}
+                    value={p[key]}
+                    inverted={key === 'competition_level'}
+                    pct={key === 'comment_volume' ? Math.min(100, ((p[key] || 0) / MAX_COMMENT_VOLUME) * 100) : null}
+                  />
                 ))}
               </div>
             </div>

@@ -36,8 +36,8 @@ export default function ProductCard({ product, onViewDetails }) {
     category = 'general',
     trend_score = 0,
     recommendation = 'Watchlist',
-    intent_score = 0,
-    profit_margin = 0
+    purchase_intent_score = 0,
+    estimated_profit_margin = 0
   } = product || {}
 
   const recConfig = getRecommendationConfig(recommendation)
@@ -72,11 +72,11 @@ export default function ProductCard({ product, onViewDetails }) {
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="bg-gray-50 rounded-lg p-2">
           <p className="text-gray-400 mb-0.5">Intent Score</p>
-          <p className="font-bold text-gray-800">{Math.round(intent_score * 100) / 100}</p>
+          <p className="font-bold text-gray-800">{(purchase_intent_score * 100).toFixed(0)}%</p>
         </div>
         <div className="bg-gray-50 rounded-lg p-2">
           <p className="text-gray-400 mb-0.5">Profit Margin</p>
-          <p className="font-bold text-gray-800">{profit_margin}%</p>
+          <p className="font-bold text-gray-800">{(estimated_profit_margin * 100).toFixed(0)}%</p>
         </div>
       </div>
 

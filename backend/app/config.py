@@ -30,10 +30,16 @@ class Settings(BaseSettings):
         "AI Winning Product Analyzer for Moroccan COD E-commerce"
     )
 
-    # CORS – stored as a JSON array string in .env, auto-parsed to list
+    # CORS – list of allowed origins.
+    # For local development the common Vite and CRA dev server ports are included.
+    # Override in production .env:  CORS_ORIGINS=["https://yourdomain.com"]
     CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:3000",
         "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:4173",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
     ]
 
     @field_validator("CORS_ORIGINS", mode="before")

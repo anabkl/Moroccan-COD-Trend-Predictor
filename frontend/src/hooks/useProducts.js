@@ -15,7 +15,7 @@ export function useProducts(initialParams = {}) {
       .then((res) => {
         if (!cancelled) {
           const data = res.data
-          setProducts(Array.isArray(data) ? data : data.products || [])
+        setProducts(Array.isArray(data) ? data : data.items || data.products || [])
         }
       })
       .catch((err) => {

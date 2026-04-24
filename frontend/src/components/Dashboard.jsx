@@ -99,14 +99,14 @@ export default function Dashboard({ onNavigate }) {
             />
             <StatCard
               label="Winning Products"
-              value={stats?.winning_count ?? products.filter(p => (p.trend_score || 0) >= 80).length}
+              value={stats?.winning_products ?? products.filter(p => (p.trend_score || 0) >= 80).length}
               icon={Award}
               colorClass="text-green-600"
               bgClass="bg-green-50"
             />
             <StatCard
               label="Promising"
-              value={stats?.promising_count ?? products.filter(p => (p.trend_score || 0) >= 60 && (p.trend_score || 0) < 80).length}
+              value={stats?.promising_products ?? products.filter(p => (p.trend_score || 0) >= 60 && (p.trend_score || 0) < 80).length}
               icon={Star}
               colorClass="text-yellow-600"
               bgClass="bg-yellow-50"
@@ -114,8 +114,8 @@ export default function Dashboard({ onNavigate }) {
             <StatCard
               label="Avg Trend Score"
               value={
-                stats?.avg_score != null
-                  ? Math.round(stats.avg_score)
+                stats?.avg_trend_score != null
+                  ? Math.round(stats.avg_trend_score)
                   : products.length > 0
                     ? Math.round(products.reduce((s, p) => s + (p.trend_score || 0), 0) / products.length)
                     : '–'
