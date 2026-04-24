@@ -1,0 +1,2 @@
+# This directory stores trained ML model artifacts (pickle, joblib, etc.)
+# Models are generated at runtime and not tracked in version control.

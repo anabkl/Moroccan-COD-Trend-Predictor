@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+venv/
+.venv/
+*.egg
+
+# Environment
+.env
+.env.local
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Database
+*.db
+*.sqlite
+*.db-shm
+*.db-wal
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+.dockerignore
+
+# Backend specific
+backend/_upload_*
+backend/soukai.db
+
+# Data: sample CSVs are committed intentionally
+# data/*.csv  <-- do NOT ignore
+
